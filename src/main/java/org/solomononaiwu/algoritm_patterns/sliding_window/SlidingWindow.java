@@ -50,16 +50,32 @@ public class SlidingWindow {
     //Longest Substring Length With K Distinct Characters
     // example - AAHHHIBC
     public static int longestSubStringKDistictCharacters(String s,int k){
-        int ls = 0;
+        int maxLength = 0;
+        int windowStart = 0;
 
         Map<Character,Integer> hs = new HashMap<>();
-        for(int windowEnd = 0; windowEnd<s.length();windowEnd++){
-            while(hs.size()<k){
 
+        for(int windowEnd = 0; windowEnd<s.length();windowEnd++){
+            if(hs.get(s.charAt(windowEnd)) != null){
+                hs.put(s.charAt(windowEnd),hs.get(s.charAt(windowEnd))+1);
+            } else {
+                hs.put(s.charAt(windowEnd),1);
             }
+
+            while (hs.size() >k){
+                char leftChar = s.charAt(windowStart);
+                hs.put(leftChar,hs.get(leftChar)-1);
+                if(hs.get(leftChar) == 0){
+                    hs.remove(leftChar);
+                }
+                windowStart++;
+            }
+
+            maxLength = Math.max(maxLength,windowEnd-windowStart+1);
+
         }
 
-        return ls;
+        return maxLength;
     }
 
     public static int getMapSum(Map<Character,Integer> data){
